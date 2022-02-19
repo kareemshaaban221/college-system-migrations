@@ -1,0 +1,9 @@
+UPDATE student_details as sd SET sd.dept_id = 
+( SELECT dept.id FROM departments as dept 
+  WHERE dept.dept_capacity_num > 
+ (SELECT COUNT(dept_id) as cnt FROM student_details WHERE dept_id = dept.id) /* num of stds in dept currently */
+ AND sd.degree >= dept.minimum_degree /* compare student deg with min required deg */
+ AND (SELECT `desire_1_id` FROM student_desires as sdes where sdes.std_id = sd.id) /* get std's desire that match */
+ = dept.id
+)
+WHERE sd.dept_id IS NULL;
